@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell" do |s|
     s.inline = "apt-get update"
+    s.inline = "apt-get upgrade -y"
     s.inline = "apt-get install -y python-simplejson"
   end
 

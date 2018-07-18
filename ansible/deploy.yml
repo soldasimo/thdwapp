@@ -1,0 +1,10 @@
+---
+- hosts: devserver
+  gather_facts: yes
+  become: true
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - deploy

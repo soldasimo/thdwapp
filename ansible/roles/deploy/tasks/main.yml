@@ -1,0 +1,67 @@
+---
+
+#
+# Build Java app
+#
+- name: create git repo base dir
+  file:
+    path: "/opt/github.com/haroonzone/hello-dropwizard"
+    state: directory
+    mode: 0755
+
+- name: fetch hello-dropwizard git repo
+  git:
+    repo: 'https://github.com/haroonzone/hello-dropwizard'
+    dest: /opt/github.com/haroonzone/hello-dropwizard
+
+- name: fix path to example.yml
+  shell: ln -sf example.yaml example.yml
+  args:
+    chdir: /opt/github.com/haroonzone/hello-dropwizard/
+    executable: /bin/bash
+
+- name: build java app
+  shell: "{{ maven_home_parent_directory }}/apache-maven-{{ maven_version }}/bin/mvn package"
+  args:
+    chdir: /opt/github.com/haroonzone/hello-dropwizard/
+    executable: /bin/bash
+
+#
+# Set up Docker environment
+#
+- name: add docker group
+  group:
+    name: docker
+
+- name: add docker user
+  user:
+    name: docker
+    group: docker
+    groups: sudo
+    append: yes
+
+- name: enable Ansible to manage Docker
+  apt:
+    name: python-pip
+    update_cache: yes
+    cache_valid_time: 3600
+
+- pip:
+    name: docker-py
+
+- name: pull Java docker image
+  docker_image:
+    name: java:8-alpine
+
+- name: copy Dockerfile to Dev server
+  copy:
+    src: default/Dockerfile
+    dest: /opt/github.com/haroonzone/hello-dropwizard/Dockerfile
+    owner: docker
+    group: docker
+    mode: 0644
+
+- name: Build Java app Docker image
+  docker_image:
+     path: /opt/github.com/haroonzone/hello-dropwizard
+     name: siso:thdwapp

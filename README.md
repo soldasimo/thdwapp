@@ -28,7 +28,14 @@ $ vagrant up
 
 Provision Development server:
 
-```
+```sh
 $ workon tdhwapp
 $ vagrant provision
+```
+
+Deploy application:
+
+```sh
+$ cd ansible
+$ ansible-playbook -i inventory deploy.yml
 ```
