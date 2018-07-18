@@ -88,11 +88,14 @@
 
 - name: copy docker-compose.yml to Dev server
   copy:
-    src: default/docker-compose.yml
-    dest: /home/docker/thdwapp/docker-compose.yml
+    src: "default/{{ item }}"
+    dest: "/home/docker/thdwapp/{{ item }}"
     owner: docker
     group: docker
     mode: 0644
+  with_items:
+    - nginx.conf
+    - docker-compose.yml
 
 #- name: start docker
 #  docker_service:

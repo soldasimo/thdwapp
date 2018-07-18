@@ -4,3 +4,9 @@ services:
     image: siso:thdwapp
     ports:
      - "8080:8080"
+  web:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
