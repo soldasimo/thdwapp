@@ -39,3 +39,9 @@ Deploy application:
 $ cd ansible
 $ ansible-playbook -i inventory deploy.yml
 ```
+
+## Checks
+
+Java app is accessible at http://192.168.1.10:8080/hello-world?name=TEST.
+
+Nginx reverse proxy http://192.168.1.10/hello/?name=TEST.

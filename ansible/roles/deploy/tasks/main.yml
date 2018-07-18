@@ -46,16 +46,6 @@
     update_cache: yes
     cache_valid_time: 3600
 
-#- pip:
-#    name: "{{ item }}"
-#  with_items:
-#    #- docker-py
-#    - docker-compose
-
-#- name: pull Java docker image
-#  docker_image:
-#    name: java:8-alpine
-
 - name: copy Dockerfile to Dev server
   copy:
     src: default/Dockerfile
@@ -96,15 +86,6 @@
   with_items:
     - nginx.conf
     - docker-compose.yml
-
-#- name: start docker
-#  docker_service:
-#    project_name: thdwapp
-#    definition:
-#      java:
-#        image: siso:thdwapp
-#        ports:
-#          - "8080:8080"
 
 # docker-py conflicts with docker-compose pip modules :/
 #- docker_service:
