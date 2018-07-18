@@ -1,0 +1,10 @@
+---
+ntp_timezone: Europe/Dublin
+
+firewall_allowed_tcp_ports:
+  - "22"
+  - "8080"
+
+maven_major: 3
+maven_version: 3.5.4
+maven_home_parent_directory: /opt

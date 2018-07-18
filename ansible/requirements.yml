@@ -1,0 +1,16 @@
+---
+- name: firewall
+  src: geerlingguy.firewall
+  version: 2.4.0
+- name: ntp
+  src: geerlingguy.ntp
+  version: 1.6.0
+- name: git
+  src: geerlingguy.git
+  version: 2.0.2
+- name: java
+  src: geerlingguy.java
+  version: 1.8.1
+- name: maven
+  src: tecris.maven
+  version: v3.5.2

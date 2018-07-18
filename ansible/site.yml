@@ -1,0 +1,15 @@
+---
+- hosts: devserver
+  gather_facts: yes
+  become: true
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - geerlingguy.firewall
+    - geerlingguy.ntp
+    - geerlingguy.git
+    - geerlingguy.java
+    - tecris.maven
+

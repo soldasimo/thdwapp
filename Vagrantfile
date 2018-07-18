@@ -17,4 +17,14 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = "devserver"
     jenkins.vm.network :private_network, ip: "192.168.1.10"
   end
+
+  config.vm.provision "shell" do |s|
+    s.inline = "apt-get update"
+    s.inline = "apt-get install -y python-simplejson"
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "ansible/site.yml"
+    #ansible.verbose = "vvv"
+  end
 end
