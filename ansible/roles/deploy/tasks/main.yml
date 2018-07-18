@@ -46,12 +46,15 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- pip:
-    name: docker-py
+#- pip:
+#    name: "{{ item }}"
+#  with_items:
+#    #- docker-py
+#    - docker-compose
 
-- name: pull Java docker image
-  docker_image:
-    name: java:8-alpine
+#- name: pull Java docker image
+#  docker_image:
+#    name: java:8-alpine
 
 - name: copy Dockerfile to Dev server
   copy:
@@ -62,6 +65,62 @@
     mode: 0644
 
 - name: Build Java app Docker image
-  docker_image:
-     path: /opt/github.com/haroonzone/hello-dropwizard
-     name: siso:thdwapp
+  # cannot have both docker-py and docker-compose
+  # either use docker_image or docker_service/docker modules :/
+  #docker_image:
+  #   path: /opt/github.com/haroonzone/hello-dropwizard
+  #   name: siso:thdwapp
+  shell: "docker build . -t siso:thdwapp"
+  args:
+    chdir: /opt/github.com/haroonzone/hello-dropwizard/
+    executable: /bin/bash
+
+#
+# Deploy containers
+#
+- name: Docker infrastructure dir
+  file:
+    path: "/home/docker/thdwapp"
+    state: directory
+    mode: 0755
+    owner: docker
+    group: docker
+
+- name: copy docker-compose.yml to Dev server
+  copy:
+    src: default/docker-compose.yml
+    dest: /home/docker/thdwapp/docker-compose.yml
+    owner: docker
+    group: docker
+    mode: 0644
+
+#- name: start docker
+#  docker_service:
+#    project_name: thdwapp
+#    definition:
+#      java:
+#        image: siso:thdwapp
+#        ports:
+#          - "8080:8080"
+
+# docker-py conflicts with docker-compose pip modules :/
+#- docker_service:
+#    project_src: "/home/docker/thdwapp"
+#    restarted: true
+
+- name: stop containers
+  shell: docker-compose down
+  args:
+    chdir: "/home/docker/thdwapp"
+    executable: /bin/bash
+  become: true
+  become_user: docker
+
+- name: start containers
+  shell: docker-compose up -d
+  args:
+    chdir: "/home/docker/thdwapp"
+    executable: /bin/bash
+  become: true
+  become_user: docker
+

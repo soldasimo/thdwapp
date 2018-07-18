@@ -1,0 +1,6 @@
+version: '3'
+services:
+  thdwapp:
+    image: siso:thdwapp
+    ports:
+     - "8080:8080"
